@@ -1,2 +1,2 @@
-# useless_printer
+# Useless Printer
 a useless printer written in rust

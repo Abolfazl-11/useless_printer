@@ -27,7 +27,7 @@ fn write_line() {
     let font: Font;
     let _alphabet: Vec<char> = String::from("abcdefghijklmnopqrstuvwxyz").chars().collect();
     
-    println!("Enter the text to render: ");
+    println!("Enter the text to render(all in lowercase letters and no special characters): ");
     io::stdin().read_line(&mut text_to_render).expect("Failed to read line!");
 
     fonts_list = fontmaker::load_fonts_list();

@@ -1,1 +1,0 @@
-/media/sdb1/Abolfazl\ 11/Scripts/rust/useless_printer/target/debug/terminalbeautifier: /media/sdb1/Abolfazl\ 11/Scripts/rust/useless_printer/src/fontmaker.rs /media/sdb1/Abolfazl\ 11/Scripts/rust/useless_printer/src/main.rs

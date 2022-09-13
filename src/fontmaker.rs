@@ -1,5 +1,5 @@
 use std::io;
-use std::fs::{File, read_dir, remove_file};
+use std::fs::{File, read_dir};
 use std::io::prelude::*;
 use std::ops::{Index, IndexMut};
 use serde::{Deserialize, Serialize};
@@ -75,9 +75,9 @@ impl New for Font {
 }
 
 //implementation indexing for Font Struct
-impl Index<&'_ i8> for Font {
+impl Index<&'_ usize> for Font {
     type Output = String;
-    fn index(&self, s: &i8) -> &String {
+    fn index(&self, s: &usize) -> &String {
         match s{
             0 => &self.a,
             1 => &self.b,
@@ -109,8 +109,8 @@ impl Index<&'_ i8> for Font {
         }
     }
 }
-impl IndexMut<&'_ i8> for Font {
-    fn index_mut(&mut self, s: &i8) -> &mut String {
+impl IndexMut<&'_ usize> for Font {
+    fn index_mut(&mut self, s: &usize) -> &mut String {
         match s{
             0 => &mut self.a,
             1 => &mut self.b,
@@ -155,13 +155,11 @@ pub fn create_font() {
     let paths = read_dir("./src/fonts/").unwrap();
     let mut font: Font = Font::new();
     let mut name = String::new();
-    let fonts_exist = check_fonts_list();
     let mut fonts;
-    let mut fonts_list = HashMap::new();
-    let mut fonts_list_str = String::new();
+    let mut fonts_list: HashMap<String, String>;
+    let fonts_list_str: String;
 
     fonts_list = load_fonts_list();
-    remove_file("./src/fonts/fonts.txt").expect("Failed to remove font file");
 
     fonts = File::create("./src/fonts/fonts.txt").expect("Failed to create font list");
 
@@ -181,7 +179,6 @@ pub fn create_font() {
                 Some(_) => {
                     println!("Font already exists!");
                     return;
-    
                 },
                 None => {},
             };
@@ -194,22 +191,21 @@ pub fn create_font() {
                 letter.read_to_string(&mut contents)
                     .expect("Couldn't read file");
 
-                let index: i8 = i.try_into().unwrap();
+                let index = i.try_into().unwrap();
 
                 font[&index] = contents;
             }
             break;
         }
     }
-    println!("font: {}", font.to_string());
-
     let json_str = save_font(&font); 
     fonts_list.insert(name, json_str);
 
     fonts_list_str = hash_to_str(&fonts_list);
-    println!("{}", fonts_list_str);
     fonts.write_all(&fonts_list_str.as_bytes())
         .expect("Error Writing fonts file");
+
+    println!("Font Added successfully!");
 }
 
 // function to serialize the given font and return that
